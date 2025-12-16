@@ -4,7 +4,7 @@ import api from "./utils/api";
 import { redirect } from "next/navigation";
 export default function Home() {
   const handleClick = async () => {
-    const response = await api.get("/");
+    const response = await api.get("/auth/login");
     console.log(response.data);
     redirect("/login");
   };

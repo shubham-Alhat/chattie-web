@@ -13,10 +13,16 @@ import api from "../utils/api";
 import { useState } from "react";
 import { toast } from "sonner";
 
-function Login() {
+function Signup() {
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const handleLoginButton = async () => {
+  const handleCreateAccount = async () => {
+    if (username == "" || !username) {
+      toast.warning("Username required!!");
+      return;
+    }
+
     if (password == "" || !password) {
       toast.warning("Password required!!");
       return;
@@ -27,7 +33,8 @@ function Login() {
       return;
     }
 
-    const response = await api.post("/auth/login", {
+    const response = await api.post("/auth/signup", {
+      username,
       password,
       email,
     });
@@ -37,11 +44,20 @@ function Login() {
     <div className="w-full h-screen flex justify-center items-center">
       <Card className="w-full max-w-sm">
         <CardHeader>
-          <CardTitle>Login to your account</CardTitle>
+          <CardTitle>Sign Up to chattie</CardTitle>
         </CardHeader>
         <CardContent>
           <form>
             <div className="flex flex-col gap-6">
+              <div className="grid gap-2">
+                <Label htmlFor="username">Username</Label>
+                <Input
+                  onChange={(e) => setUsername(e.target.value)}
+                  id="username"
+                  type="text"
+                  required
+                />
+              </div>
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -51,16 +67,9 @@ function Login() {
                   required
                 />
               </div>
-
               <div className="grid gap-2">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
-                  <a
-                    href="#"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                  >
-                    Forgot your password?
-                  </a>
                 </div>
                 <Input
                   onChange={(e) => setPassword(e.target.value)}
@@ -73,8 +82,12 @@ function Login() {
           </form>
         </CardContent>
         <CardFooter className="flex-col gap-2">
-          <Button onClick={handleLoginButton} type="submit" className="w-full">
-            Login
+          <Button
+            onClick={handleCreateAccount}
+            type="submit"
+            className="w-full"
+          >
+            Create Account
           </Button>
         </CardFooter>
       </Card>
@@ -82,4 +95,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Signup;

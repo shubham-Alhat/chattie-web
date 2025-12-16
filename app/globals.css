@@ -115,6 +115,87 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* Toast colors */
+[data-sonner-toast][data-type="success"] {
+  background-color: hsl(142.1 76.2% 36.3% / 0.1) !important;
+  border-color: hsl(142.1 76.2% 36.3%) !important;
+  color: hsl(142.1 70.6% 45.3%) !important;
+}
+
+[data-sonner-toast][data-type="success"] [data-icon] {
+  color: hsl(142.1 70.6% 45.3%) !important;
+}
+
+[data-sonner-toast][data-type="error"] {
+  background-color: hsl(0 84.2% 60.2% / 0.1) !important;
+  border-color: hsl(0 84.2% 60.2%) !important;
+  color: hsl(0 72.2% 50.6%) !important;
+}
+
+[data-sonner-toast][data-type="error"] [data-icon] {
+  color: hsl(0 72.2% 50.6%) !important;
+}
+
+[data-sonner-toast][data-type="warning"] {
+  background-color: hsl(38 92% 50% / 0.1) !important;
+  border-color: hsl(38 92% 50%) !important;
+  color: hsl(32.1 94.6% 43.7%) !important;
+}
+
+[data-sonner-toast][data-type="warning"] [data-icon] {
+  color: hsl(32.1 94.6% 43.7%) !important;
+}
+
+[data-sonner-toast][data-type="info"] {
+  background-color: hsl(221.2 83.2% 53.3% / 0.1) !important;
+  border-color: hsl(221.2 83.2% 53.3%) !important;
+  color: hsl(217.2 91.2% 59.8%) !important;
+}
+
+[data-sonner-toast][data-type="info"] [data-icon] {
+  color: hsl(217.2 91.2% 59.8%) !important;
+}
+
+.dark [data-sonner-toast][data-type="success"] {
+  background-color: hsl(142.1 76.2% 36.3% / 0.15) !important;
+  border-color: hsl(142.1 70.6% 45.3%) !important;
+  color: hsl(142.1 76.2% 66.3%) !important;
+}
+
+.dark [data-sonner-toast][data-type="success"] [data-icon] {
+  color: hsl(142.1 76.2% 66.3%) !important;
+}
+
+.dark [data-sonner-toast][data-type="error"] {
+  background-color: hsl(0 84.2% 60.2% / 0.15) !important;
+  border-color: hsl(0 72.2% 50.6%) !important;
+  color: hsl(0 84.2% 70.2%) !important;
+}
+
+.dark [data-sonner-toast][data-type="error"] [data-icon] {
+  color: hsl(0 84.2% 70.2%) !important;
+}
+
+.dark [data-sonner-toast][data-type="warning"] {
+  background-color: hsl(38 92% 50% / 0.15) !important;
+  border-color: hsl(32.1 94.6% 43.7%) !important;
+  color: hsl(38 92% 70%) !important;
+}
+
+.dark [data-sonner-toast][data-type="warning"] [data-icon] {
+  color: hsl(38 92% 70%) !important;
+}
+
+.dark [data-sonner-toast][data-type="info"] {
+  background-color: hsl(221.2 83.2% 53.3% / 0.15) !important;
+  border-color: hsl(217.2 91.2% 59.8%) !important;
+  color: hsl(221.2 83.2% 73.3%) !important;
+}
+
+.dark [data-sonner-toast][data-type="info"] [data-icon] {
+  color: hsl(221.2 83.2% 73.3%) !important;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
