@@ -1,11 +1,12 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import api from "./utils/api";
-
+import { redirect } from "next/navigation";
 export default function Home() {
   const handleClick = async () => {
-    const res = await api.get("/");
-    console.log(res);
+    const response = await api.get("/");
+    console.log(response.data);
+    redirect("/login");
   };
   return (
     <div className="w-full h-screen flex flex-col items-center justify-center">
