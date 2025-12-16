@@ -150,6 +150,6 @@ export async function POST(req) {
 
 [Problem with "NEXT_PUBLIC" prefix](https://claude.ai/share/1dd0e7b6-8ac9-4e3e-b28e-0ff0b7096eb8)
 
-The "elite mental model" should be: Use the simplest architecture that meets your requirements.
+The **"elite mental model"** should be: Use the simplest architecture that meets your requirements.
 
-I still need understand deeply
+I still need understand deeply && for this simple project i am using NEXT_PUBLIC appoach as i dont have any secrets here in Nextjs.
