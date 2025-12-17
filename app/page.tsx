@@ -4,9 +4,9 @@ import api from "./utils/api";
 import { redirect } from "next/navigation";
 export default function Home() {
   const handleClick = async () => {
-    const response = await api.get("/auth/login");
-    console.log(response.data);
-    redirect("/login");
+    const res = await api.get("/checkme");
+    console.log(res);
+    // redirect("/chat");
   };
   return (
     <div className="w-full h-screen flex flex-col items-center justify-center">

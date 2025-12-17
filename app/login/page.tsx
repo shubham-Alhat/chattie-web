@@ -12,26 +12,46 @@ import { Label } from "@/components/ui/label";
 import api from "../utils/api";
 import { useState } from "react";
 import { toast } from "sonner";
+import axios from "axios";
+import useAuthStore from "@/store/authStore";
+import { useRouter } from "next/navigation";
 
 function Login() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const router = useRouter();
+
+  const { authUser, setAuthUser } = useAuthStore();
+
   const handleLoginButton = async () => {
-    if (password == "" || !password) {
-      toast.warning("Password required!!");
-      return;
-    }
+    try {
+      if (password == "" || !password) {
+        toast.warning("Password required!!");
+        return;
+      }
 
-    if (email == "" || !email) {
-      toast.warning("Email required!!");
-      return;
-    }
+      if (email == "" || !email) {
+        toast.warning("Email required!!");
+        return;
+      }
 
-    const response = await api.post("/auth/login", {
-      password,
-      email,
-    });
-    console.log(response);
+      const response = await api.post("/auth/login", {
+        password,
+        email,
+      });
+      setAuthUser(response.data.data);
+
+      router.push("/chat");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error.response?.data.message);
+        toast.error(error.response?.data.message);
+      } else {
+        const err = error as Error;
+        console.log(err);
+        toast.error(err.message);
+      }
+    }
   };
   return (
     <div className="w-full h-screen flex justify-center items-center">

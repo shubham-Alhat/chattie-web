@@ -153,3 +153,62 @@ export async function POST(req) {
 The **"elite mental model"** should be: Use the simplest architecture that meets your requirements.
 
 I still need understand deeply && for this simple project i am using NEXT_PUBLIC appoach as i dont have any secrets here in Nextjs.
+
+---
+
+### Client-server architecture on how to navigate from server and what should we follow.
+
+#### Please read second 2nd chat, not first. in this, i am using correct right approach
+
+[chat from claude](https://claude.ai/share/8d378f3e-c8b5-40c2-bfaa-135dd2d2714f)
+
+Real-World Best Practice 🏆
+
+```javascript
+// Backend - Return structured data
+app.post("/auth/signup", async (req, res) => {
+  try {
+    const user = await createUser(req.body);
+    res.status(201).json({
+      success: true,
+      data: { user },
+      redirect: "/dashboard", // Optional: suggest where to go
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+// Frontend - Smart navigation
+try {
+  const { data } = await api.post("/auth/signup", formData);
+
+  // Optional: Use backend suggestion
+  router.push(data.redirect || "/login");
+
+  // Or: Your own logic
+  if (data.user.needsVerification) {
+    router.push("/verify-email");
+  } else {
+    router.push("/dashboard");
+  }
+} catch (error) {
+  // Handle error
+}
+```
+
+---
+
+### Concept of Axios error and Error resulting from TS
+
+**Axios Error response**
+![alt text](image.png)
+
+**Success response in frontend to access required data and messages**
+![alt text](image-1.png)
+
+**Error object**
+error.message - [nodejs Error docs](https://nodejs.org/api/errors.html#errormessage)

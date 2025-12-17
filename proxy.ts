@@ -2,11 +2,12 @@ import { NextResponse, NextRequest } from "next/server";
 
 // This function can be marked `async` if using `await` inside
 export async function proxy(request: NextRequest) {
-  const tokens = request.cookies.getAll();
-  console.log(tokens);
-  return NextResponse.redirect(new URL("/login", request.url));
+  console.log("hello");
+  return;
 }
 
 export const config = {
-  matcher: ["/chat/:path*"],
+  matcher: ["/"],
 };
+
+// i think i will not use this file as middleware. experiment with bckend. writing alll middlewares in backend

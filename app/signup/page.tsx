@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,32 +14,53 @@ import api from "../utils/api";
 import { useState } from "react";
 import { toast } from "sonner";
 
+import { useRouter } from "next/navigation";
+import axios from "axios";
+
 function Signup() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const router = useRouter();
   const handleCreateAccount = async () => {
-    if (username == "" || !username) {
-      toast.warning("Username required!!");
-      return;
-    }
+    try {
+      if (username == "" || !username) {
+        toast.warning("Username required!!");
+        return;
+      }
 
-    if (password == "" || !password) {
-      toast.warning("Password required!!");
-      return;
-    }
+      if (password == "" || !password) {
+        toast.warning("Password required!!");
+        return;
+      }
 
-    if (email == "" || !email) {
-      toast.warning("Email required!!");
-      return;
-    }
+      if (email == "" || !email) {
+        toast.warning("Email required!!");
+        return;
+      }
 
-    const response = await api.post("/auth/signup", {
-      username,
-      password,
-      email,
-    });
-    console.log(response);
+      const response = await api.post("/auth/signup", {
+        username: username.trim(),
+        password: password.trim(),
+        email: email.trim(),
+      });
+
+      console.log(response);
+
+      if (response.data.redirect) {
+        toast.success(response.data.message);
+        router.replace(response.data.redirect);
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error.response?.data.message);
+        toast.error(error.response?.data.message);
+      } else {
+        const err = error as Error;
+        console.log(err);
+        toast.error(err.message);
+      }
+    }
   };
   return (
     <div className="w-full h-screen flex justify-center items-center">
@@ -89,6 +111,12 @@ function Signup() {
           >
             Create Account
           </Button>
+          <div>
+            <span className="pr-2.5">already have account?</span>
+            <Link href={"/login"} className="underline text-blue-300">
+              Login
+            </Link>
+          </div>
         </CardFooter>
       </Card>
     </div>
