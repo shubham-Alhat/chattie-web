@@ -39,6 +39,8 @@ function Login() {
         password,
         email,
       });
+
+      // set authUser state
       setAuthUser(response.data.data);
 
       router.push("/chat");

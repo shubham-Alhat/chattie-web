@@ -1,7 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import api from "./utils/api";
-import { redirect } from "next/navigation";
 export default function Home() {
   const handleClick = async () => {
     const res = await api.get("/checkme");

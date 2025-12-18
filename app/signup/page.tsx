@@ -49,7 +49,7 @@ function Signup() {
 
       if (response.data.redirect) {
         toast.success(response.data.message);
-        router.replace(response.data.redirect);
+        router.push(response.data.redirect);
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
