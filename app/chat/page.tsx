@@ -4,6 +4,7 @@ import useAuthStore from "@/store/authStore";
 import axios from "axios";
 import { toast } from "sonner";
 import api from "../utils/api";
+import { ChatLayout } from "@/components/chat-layout";
 
 function Chat() {
   const { authUser, setAuthUser } = useAuthStore();
@@ -11,10 +12,10 @@ function Chat() {
   useEffect(() => {
     const setUser = async () => {
       try {
-        const res = await api.get("/checkme");
-        if (res.data.data) {
-          setAuthUser(res.data.data);
-        }
+        // const res = await api.get("/checkme");
+        // if (res.data.data) {
+        //   setAuthUser(res.data.data);
+        // }
       } catch (error) {
         if (axios.isAxiosError(error)) {
           toast.error(error.response?.data.message);
@@ -29,8 +30,9 @@ function Chat() {
 
   return (
     <>
-      <div>username : {authUser?.username}</div>
-      <div>email : {authUser?.email}</div>
+      <div>
+        <ChatLayout />
+      </div>
     </>
   );
 }
