@@ -6,6 +6,7 @@ import { ChatMessages } from "@/components/chat-messages";
 import { ChatInput } from "@/components/chat-input";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
+import DefaultChatBox from "./DefaultChatBox";
 
 interface Message {
   id: string;
@@ -145,6 +146,7 @@ export function ChatLayout() {
       </aside>
 
       {/* Main chat area */}
+
       <main className="flex flex-1 flex-col overflow-hidden">
         {/* Header */}
         <header className="flex items-center gap-3 border-b border-border bg-card px-4 py-3 lg:px-6">
@@ -177,6 +179,7 @@ export function ChatLayout() {
         </div>
 
         {/* Input */}
+
         <div className="border-t border-border bg-card p-4">
           <ChatInput onSendMessage={handleSendMessage} />
         </div>

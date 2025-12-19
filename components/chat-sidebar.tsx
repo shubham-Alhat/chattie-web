@@ -1,12 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Search, X, MoreVertical, Edit } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { DropdownMenuDemo } from "./Dropdown";
+import axios from "axios";
+import { toast } from "sonner";
+import api from "@/app/utils/api";
+import useChatStore from "@/store/chatStore";
 
 interface Conversation {
   id: string;
@@ -31,6 +35,32 @@ export function ChatSidebar({
   onClose,
 }: ChatSidebarProps) {
   const [searchQuery, setSearchQuery] = useState("");
+  const otherChats = useChatStore((state) => state.otherChats);
+  const setOtherChats = useChatStore((state) => state.setOtherChats);
+
+  useEffect(() => {
+    const getAllChats = async () => {
+      try {
+        const res = await api.get("/chats/get-all-chats");
+
+        console.log(res.data.data);
+
+        setOtherChats(res.data.data);
+        console.log(otherChats);
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          console.log(error);
+          toast.error(error.response?.data.message);
+        } else {
+          const err = error as Error;
+          console.log(err);
+          toast.error(err.message);
+        }
+      }
+    };
+
+    getAllChats();
+  }, []);
 
   const filteredConversations = conversations.filter((conv) =>
     conv.name.toLowerCase().includes(searchQuery.toLowerCase())

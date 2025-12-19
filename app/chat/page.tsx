@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import useAuthStore from "@/store/authStore";
 import axios from "axios";
 import { toast } from "sonner";
@@ -12,21 +12,22 @@ function Chat() {
   useEffect(() => {
     const setUser = async () => {
       try {
-        // const res = await api.get("/checkme");
-        // if (res.data.data) {
-        //   setAuthUser(res.data.data);
-        // }
+        const res = await api.get("/checkme");
+        if (res.data.data) {
+          setAuthUser(res.data.data);
+        }
       } catch (error) {
         if (axios.isAxiosError(error)) {
           toast.error(error.response?.data.message);
         } else {
           console.log(error);
         }
+      } finally {
       }
     };
 
     setUser();
-  }, [authUser]);
+  }, []);
 
   return (
     <>

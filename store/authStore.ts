@@ -4,8 +4,10 @@ type User = {
   id: string;
   username: string;
   email: string;
-  password: string;
+  password?: string;
   avatar: string | null;
+  sentMessages?: [];
+  receivedMessages?: [];
   updatedAt?: string;
   createdAt?: string;
 };
