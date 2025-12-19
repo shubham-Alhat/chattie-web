@@ -21,7 +21,13 @@ function Signup() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [avatar, setAvatar] = useState("");
   const router = useRouter();
+
+  // useEffect(() => {
+  //   console.log(avatar, avatar.length);
+  // }, [avatar]);
+
   const handleCreateAccount = async () => {
     try {
       if (username == "" || !username) {
@@ -39,17 +45,25 @@ function Signup() {
         return;
       }
 
+      if (avatar == "" || avatar.length !== 2) {
+        toast.warning("Avatar TEXT must be length of 2 letters");
+        return;
+      }
+
+      const avatarText = avatar.toUpperCase();
+
       const response = await api.post("/auth/signup", {
         username: username.trim(),
         password: password.trim(),
         email: email.trim(),
+        avatar: avatarText.trim(),
       });
 
       console.log(response);
 
       if (response.data.redirect) {
         toast.success(response.data.message);
-        router.push(response.data.redirect);
+        router.push(response.data.redirect); // go to login
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -98,6 +112,19 @@ function Signup() {
                   id="password"
                   type="password"
                   required
+                />
+              </div>
+              {/* set up for avatar TEXT */}
+              <div className="grid gap-2">
+                <div className="flex items-center">
+                  <Label htmlFor="avatar">Avatar TEXT</Label>
+                </div>
+                <Input
+                  id="avatar"
+                  type="text"
+                  required
+                  onChange={(e) => setAvatar(e.target.value)}
+                  placeholder="Eg. SA"
                 />
               </div>
             </div>

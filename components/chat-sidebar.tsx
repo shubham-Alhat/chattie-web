@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Search, X, MoreVertical, Edit } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { DropdownMenuDemo } from "./Dropdown";
 
 interface Conversation {
   id: string;
@@ -41,14 +42,15 @@ export function ChatSidebar({
       <div className="flex items-center justify-between border-b border-border px-4 py-4">
         <h1 className="text-xl font-bold text-card-foreground">Chats</h1>
         <div className="flex items-center gap-1">
-          <Button variant="ghost" size="icon" className="h-9 w-9">
+          {/* <Button variant="ghost" size="icon" className="h-9 w-9">
             <Edit className="h-4 w-4" />
             <span className="sr-only">New message</span>
-          </Button>
-          <Button variant="ghost" size="icon" className="h-9 w-9">
+          </Button> */}
+          {/* <Button variant="ghost" size="icon" className="h-9 w-9">
             <MoreVertical className="h-4 w-4" />
             <span className="sr-only">More options</span>
-          </Button>
+          </Button> */}
+          <DropdownMenuDemo />
           <Button
             variant="ghost"
             size="icon"

@@ -6,6 +6,8 @@ import axios from "axios";
 export async function proxy(request: NextRequest) {
   const token = request.cookies.get("accessToken")?.value;
 
+  return;
+
   if (!token) {
     return NextResponse.redirect(new URL("/login", request.url));
   }

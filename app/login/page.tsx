@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import axios from "axios";
 import useAuthStore from "@/store/authStore";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 function Login() {
   const [password, setPassword] = useState("");
@@ -98,6 +99,16 @@ function Login() {
           <Button onClick={handleLoginButton} type="submit" className="w-full">
             Login
           </Button>
+
+          <div>
+            <span className="pr-1">Dont have an account?</span>
+            <span>
+              <Link href={"/signup"} className="text-primary underline">
+                {" "}
+                Sign Up
+              </Link>
+            </span>
+          </div>
         </CardFooter>
       </Card>
     </div>
