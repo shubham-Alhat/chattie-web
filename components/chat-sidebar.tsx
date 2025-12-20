@@ -35,32 +35,11 @@ export function ChatSidebar({
   onClose,
 }: ChatSidebarProps) {
   const [searchQuery, setSearchQuery] = useState("");
+
+  // useChatStore
   const otherChats = useChatStore((state) => state.otherChats);
-  const setOtherChats = useChatStore((state) => state.setOtherChats);
-
-  useEffect(() => {
-    const getAllChats = async () => {
-      try {
-        const res = await api.get("/chats/get-all-chats");
-
-        console.log(res.data.data);
-
-        setOtherChats(res.data.data);
-        console.log(otherChats);
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          console.log(error);
-          toast.error(error.response?.data.message);
-        } else {
-          const err = error as Error;
-          console.log(err);
-          toast.error(err.message);
-        }
-      }
-    };
-
-    getAllChats();
-  }, []);
+  const selectedChat = useChatStore((state) => state.selectedChat);
+  const setSelectedChat = useChatStore((state) => state.setSelectedChat);
 
   const filteredConversations = conversations.filter((conv) =>
     conv.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -110,38 +89,40 @@ export function ChatSidebar({
       {/* Conversations list */}
       <ScrollArea className="flex-1">
         <div className="space-y-1 px-2">
-          {filteredConversations.map((conversation) => (
+          {otherChats.map((chat) => (
             <button
-              key={conversation.id}
-              onClick={() => onSelectConversation(conversation)}
+              key={chat.id}
+              onClick={() => setSelectedChat(chat)}
               className={cn(
                 "flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left transition-colors hover:bg-background cursor-pointer",
-                selectedConversation.id === conversation.id && "bg-background"
+                selectedChat !== null && selectedChat.id === chat.id
+                  ? "bg-background"
+                  : ""
               )}
             >
               <div className="relative flex-shrink-0">
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground font-semibold">
-                  {conversation.avatar}
+                  {chat.avatar}
                 </div>
-                {conversation.unread && (
+                {/* {conversation.unread && (
                   <div className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-xs font-bold text-accent-foreground">
                     {conversation.unread}
                   </div>
-                )}
+                )} */}
               </div>
 
               <div className="flex-1 overflow-hidden">
                 <div className="flex items-center justify-between gap-2">
                   <h3 className="font-semibold text-card-foreground truncate">
-                    {conversation.name}
+                    {chat.username}
                   </h3>
                   <span className="text-xs text-muted-foreground whitespace-nowrap">
-                    {conversation.timestamp}
+                    00.00
                   </span>
                 </div>
-                <p className="text-sm text-muted-foreground truncate">
-                  {conversation.lastMessage}
-                </p>
+                {/* <p className="text-sm text-muted-foreground truncate">
+                  last message
+                </p> */}
               </div>
             </button>
           ))}

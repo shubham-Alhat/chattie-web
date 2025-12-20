@@ -212,3 +212,27 @@ try {
 
 **Error object**
 error.message - [nodejs Error docs](https://nodejs.org/api/errors.html#errormessage)
+
+---
+
+### Multiple api calls in nested components.
+
+[Read this claude chat](https://claude.ai/share/71a50730-cdb9-4fe0-a6c4-29250d4af1cb)
+
+---
+
+### cn() in tailwindcss
+
+**Allow to write conditional tailwindcss classes**
+_refer from chat-sidebar.tsx_
+
+```javascript
+<button
+  key={chat.id}
+  onClick={() => setSelectedChat(chat)}
+  className={cn(
+    "flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left transition-colors hover:bg-background cursor-pointer",
+    selectedChat !== null && selectedChat.id === chat.id ? "bg-background" : ""
+  )}
+></button>
+```

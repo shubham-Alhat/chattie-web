@@ -1,11 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChatSidebar } from "@/components/chat-sidebar";
 import { ChatMessages } from "@/components/chat-messages";
 import { ChatInput } from "@/components/chat-input";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
+import axios from "axios";
+import { toast } from "sonner";
+import useAuthStore from "@/store/authStore";
+import api from "@/app/utils/api";
+import useChatStore from "@/store/chatStore";
 import DefaultChatBox from "./DefaultChatBox";
 
 interface Message {
@@ -103,6 +108,14 @@ export function ChatLayout() {
     useState<Conversation>(mockConversations[0]);
   const [messages, setMessages] = useState<Message[]>(mockMessages);
 
+  const authUser = useAuthStore((state) => state.authUser);
+  const setAuthUser = useAuthStore((state) => state.setAuthUser);
+
+  // useChatStore
+  const otherChats = useChatStore((state) => state.otherChats);
+  const setOtherChats = useChatStore((state) => state.setOtherChats);
+  const selectedChat = useChatStore((state) => state.selectedChat);
+
   const handleSendMessage = (text: string) => {
     const newMessage: Message = {
       id: Date.now().toString(),
@@ -120,6 +133,41 @@ export function ChatLayout() {
     setSelectedConversation(conversation);
     setIsSidebarOpen(false);
   };
+
+  useEffect(() => {
+    const getAuthUser = async () => {
+      try {
+        const res = await api.get("/checkme");
+        if (res.data.data) {
+          setAuthUser(res.data.data);
+        }
+
+        const otherUsers = await api.get("/chats/get-all-chats");
+
+        if (otherUsers.data.data) {
+          setOtherChats(otherUsers.data.data);
+        }
+      } catch (error) {
+        console.log("error", error);
+        if (axios.isAxiosError(error)) {
+          console.log("axios error - ", error);
+          if (error.response && error.response.data.message) {
+            toast.error(error.response?.data.message);
+          } else {
+            toast.error(error.message);
+          }
+        } else {
+          console.log(error);
+        }
+      }
+    };
+
+    getAuthUser();
+  }, []);
+
+  useEffect(() => {
+    console.log("from useEffect - ", otherChats);
+  }, [otherChats]);
 
   return (
     <div className="flex h-screen overflow-hidden bg-background">
@@ -147,43 +195,47 @@ export function ChatLayout() {
 
       {/* Main chat area */}
 
-      <main className="flex flex-1 flex-col overflow-hidden">
-        {/* Header */}
-        <header className="flex items-center gap-3 border-b border-border bg-card px-4 py-3 lg:px-6">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="lg:hidden"
-            onClick={() => setIsSidebarOpen(true)}
-          >
-            <Menu className="h-5 w-5" />
-            <span className="sr-only">Open sidebar</span>
-          </Button>
+      {!selectedChat || selectedChat === null ? (
+        <DefaultChatBox openSidebar={() => setIsSidebarOpen(true)} />
+      ) : (
+        <main className="flex flex-1 flex-col overflow-hidden">
+          {/* Header */}
+          <header className="flex items-center gap-3 border-b border-border bg-card px-4 py-3 lg:px-6">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="lg:hidden"
+              onClick={() => setIsSidebarOpen(true)}
+            >
+              <Menu className="h-5 w-5" />
+              <span className="sr-only">Open sidebar</span>
+            </Button>
 
-          <div className="flex items-center gap-3 flex-1">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground font-semibold">
-              {selectedConversation.avatar}
+            <div className="flex items-center gap-3 flex-1">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground font-semibold">
+                {selectedChat?.avatar}
+              </div>
+              <div className="flex-1 min-w-0">
+                <h2 className="font-semibold text-card-foreground truncate">
+                  {selectedChat?.username}
+                </h2>
+                <p className="text-sm text-muted-foreground">Active now</p>
+              </div>
             </div>
-            <div className="flex-1 min-w-0">
-              <h2 className="font-semibold text-card-foreground truncate">
-                {selectedConversation.name}
-              </h2>
-              <p className="text-sm text-muted-foreground">Active now</p>
-            </div>
+          </header>
+
+          {/* Messages */}
+          <div className="flex-1 overflow-hidden">
+            <ChatMessages messages={messages} />
           </div>
-        </header>
 
-        {/* Messages */}
-        <div className="flex-1 overflow-hidden">
-          <ChatMessages messages={messages} />
-        </div>
+          {/* Input */}
 
-        {/* Input */}
-
-        <div className="border-t border-border bg-card p-4">
-          <ChatInput onSendMessage={handleSendMessage} />
-        </div>
-      </main>
+          <div className="border-t border-border bg-card p-4">
+            <ChatInput onSendMessage={handleSendMessage} />
+          </div>
+        </main>
+      )}
     </div>
   );
 }
