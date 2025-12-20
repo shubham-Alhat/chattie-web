@@ -236,3 +236,87 @@ _refer from chat-sidebar.tsx_
   )}
 ></button>
 ```
+
+---
+
+### Sorting/filtering chats using keywords
+
+Of course! Let me explain this step by step. It's actually a really interesting JavaScript behavior! 🎯
+
+#### How `.includes("")` Works
+
+The key is understanding what the `.includes()` method does with an **empty string**.
+
+#### The Rule:
+
+**Every string contains an empty string!**
+
+Think of it like this: an empty string `""` exists at every position in every string, including at the very beginning.
+
+#### Examples:
+
+```javascript
+// Any string includes an empty string
+"Hello".includes(""); // ✅ true
+"World".includes(""); // ✅ true
+"".includes(""); // ✅ true (even empty includes empty!)
+"JavaScript".includes(""); // ✅ true
+
+// But with actual characters:
+"Hello".includes("Hel"); // ✅ true (found)
+"Hello".includes("xyz"); // ❌ false (not found)
+```
+
+#### In Your Code:
+
+Let's trace through what happens:
+
+**Scenario 1: Search is empty**
+
+```javascript
+const searchQuery = ""; // User hasn't typed anything
+
+conversations.filter((conv) => conv.name.toLowerCase().includes(""));
+
+// For each conversation:
+// "John Doe".toLowerCase().includes("")     → true ✅
+// "Jane Smith".toLowerCase().includes("")   → true ✅
+// "Bob Wilson".toLowerCase().includes("")   → true ✅
+
+// Result: ALL conversations pass the filter!
+```
+
+**Scenario 2: Search has text**
+
+```javascript
+const searchQuery = "John"; // User typed "John"
+
+conversations.filter((conv) => conv.name.toLowerCase().includes("john"));
+
+// For each conversation:
+// "john doe".includes("john")     → true ✅
+// "jane smith".includes("john")   → false ❌
+// "bob wilson".includes("john")   → false ❌
+
+// Result: Only "John Doe" passes the filter!
+```
+
+#### Visual Representation:
+
+```
+String: "Hello"
+Empty string "" can be found at positions:
+|H|e|l|l|o|
+↑ ↑ ↑ ↑ ↑ ↑
+"" exists at ALL these positions!
+
+That's why "Hello".includes("") is always true!
+```
+
+#### Why This Is Useful:
+
+This behavior makes your filter code **elegant and simple**:
+
+- ✅ No need for `if (searchQuery === "") return conversations;`
+- ✅ No need for special cases
+- ✅ One filter handles both empty and filled search states

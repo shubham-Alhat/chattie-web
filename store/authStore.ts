@@ -14,12 +14,12 @@ type User = {
 
 interface AuthState {
   authUser: User | null;
-  setAuthUser: (user: User) => void;
+  setAuthUser: (user: User | null) => void;
 }
 
 const useAuthStore = create<AuthState>((set) => ({
   authUser: null,
-  setAuthUser: (user: User) => {
+  setAuthUser: (user) => {
     set({ authUser: user });
   },
 }));

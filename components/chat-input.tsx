@@ -6,18 +6,48 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Send, Paperclip, Smile } from "lucide-react";
+import useChatStore from "@/store/chatStore";
+import axios from "axios";
+import { toast } from "sonner";
+import api from "@/app/utils/api";
 
 interface ChatInputProps {
   onSendMessage: (text: string) => void;
 }
 
 export function ChatInput({ onSendMessage }: ChatInputProps) {
-  const [message, setMessage] = useState("");
+  const [inputMessage, setInputMessage] = useState("");
 
-  const handleSend = () => {
-    if (message.trim()) {
-      onSendMessage(message);
-      setMessage("");
+  // useChatStore
+  const selectedChat = useChatStore((state) => state.selectedChat);
+
+  const handleSend = async () => {
+    try {
+      if (inputMessage.trim() === "" || !inputMessage.trim()) {
+        toast.info("Text message required");
+        return;
+      }
+
+      const textMessage = inputMessage;
+      setInputMessage("");
+
+      const res = await api.post("/chats/send-message", {
+        textMessage: textMessage,
+        receiverId: selectedChat?.id,
+      });
+
+      console.log(res);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log(error);
+        if (error.response?.data.message) {
+          toast.error(error.response.data.message);
+        } else {
+          toast.error(error.message);
+        }
+      } else {
+        console.log(error);
+      }
     }
   };
 
@@ -33,10 +63,10 @@ export function ChatInput({ onSendMessage }: ChatInputProps) {
       <div className="flex flex-1 flex-col gap-2 rounded-xl border border-border bg-background p-2">
         <Textarea
           placeholder="Type a message..."
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          value={inputMessage}
+          onChange={(e) => setInputMessage(e.target.value)}
           onKeyDown={handleKeyDown}
-          className="min-h-[60px] resize-none border-0 bg-transparent p-2 text-[15px] leading-relaxed focus-visible:ring-0 focus-visible:ring-offset-0"
+          className="min-h-[60px] max-h-[120px] resize-none border-0 bg-transparent p-2 text-[15px] leading-relaxed focus-visible:ring-0 focus-visible:ring-offset-0"
         />
 
         <div className="flex items-center justify-between gap-2">
@@ -53,7 +83,7 @@ export function ChatInput({ onSendMessage }: ChatInputProps) {
 
           <Button
             onClick={handleSend}
-            disabled={!message.trim()}
+            disabled={!inputMessage.trim()}
             size="sm"
             className="h-8 gap-2"
           >

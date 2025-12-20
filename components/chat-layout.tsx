@@ -12,6 +12,7 @@ import useAuthStore from "@/store/authStore";
 import api from "@/app/utils/api";
 import useChatStore from "@/store/chatStore";
 import DefaultChatBox from "./DefaultChatBox";
+import useMessageStore from "@/store/messageStore";
 
 interface Message {
   id: string;
@@ -100,14 +101,27 @@ const mockMessages: Message[] = [
     sender: "other",
     timestamp: "10:36 AM",
   },
+  {
+    id: "6",
+    text: "This is my first custome added message.",
+    sender: "user",
+    timestamp: "12:00 AM",
+  },
+  {
+    id: "7",
+    text: "well , second one",
+    sender: "other",
+    timestamp: "12:45 PM",
+  },
 ];
 
 export function ChatLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedConversation, setSelectedConversation] =
     useState<Conversation>(mockConversations[0]);
-  const [messages, setMessages] = useState<Message[]>(mockMessages);
+  // const [messages, setMessages] = useState<Message[]>(mockMessages);
 
+  // useAuthStore
   const authUser = useAuthStore((state) => state.authUser);
   const setAuthUser = useAuthStore((state) => state.setAuthUser);
 
@@ -115,6 +129,11 @@ export function ChatLayout() {
   const otherChats = useChatStore((state) => state.otherChats);
   const setOtherChats = useChatStore((state) => state.setOtherChats);
   const selectedChat = useChatStore((state) => state.selectedChat);
+  const setSelectedChat = useChatStore((state) => state.setSelectedChat);
+
+  // useMessageStore
+
+  const setMessages = useMessageStore((state) => state.setMessages);
 
   const handleSendMessage = (text: string) => {
     const newMessage: Message = {
@@ -135,6 +154,13 @@ export function ChatLayout() {
   };
 
   useEffect(() => {
+    // reset states
+    setAuthUser(null);
+    setOtherChats([]);
+    setSelectedChat(null);
+    setMessages([]);
+
+    // call fresh api
     const getAuthUser = async () => {
       try {
         const res = await api.get("/checkme");
@@ -165,9 +191,9 @@ export function ChatLayout() {
     getAuthUser();
   }, []);
 
-  useEffect(() => {
-    console.log("from useEffect - ", otherChats);
-  }, [otherChats]);
+  // useEffect(() => {
+  //   console.log("from useEffect - ", otherChats);
+  // }, [otherChats]);
 
   return (
     <div className="flex h-screen overflow-hidden bg-background">
@@ -226,7 +252,7 @@ export function ChatLayout() {
 
           {/* Messages */}
           <div className="flex-1 overflow-hidden">
-            <ChatMessages messages={messages} />
+            <ChatMessages />
           </div>
 
           {/* Input */}

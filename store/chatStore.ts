@@ -15,19 +15,19 @@ type Chat = {
 type OtherChatsArray = Array<Chat>;
 
 interface ChatStore {
-  otherChats: OtherChatsArray;
-  setOtherChats: (otherChats: OtherChatsArray) => void;
+  otherChats: OtherChatsArray | [];
+  setOtherChats: (otherChats: OtherChatsArray | []) => void;
   selectedChat: Chat | null;
-  setSelectedChat: (chat: Chat) => void;
+  setSelectedChat: (chat: Chat | null) => void;
 }
 
 const useChatStore = create<ChatStore>((set) => ({
   otherChats: [],
-  setOtherChats: (otherChats: OtherChatsArray) => {
+  setOtherChats: (otherChats) => {
     set({ otherChats: otherChats });
   },
   selectedChat: null,
-  setSelectedChat: (chat: Chat) => {
+  setSelectedChat: (chat) => {
     set({ selectedChat: chat });
   },
 }));

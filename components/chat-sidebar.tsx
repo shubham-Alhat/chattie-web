@@ -41,8 +41,8 @@ export function ChatSidebar({
   const selectedChat = useChatStore((state) => state.selectedChat);
   const setSelectedChat = useChatStore((state) => state.setSelectedChat);
 
-  const filteredConversations = conversations.filter((conv) =>
-    conv.name.toLowerCase().includes(searchQuery.toLowerCase())
+  const visibleChats = otherChats.filter((conv) =>
+    conv.username.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -78,7 +78,7 @@ export function ChatSidebar({
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             type="search"
-            placeholder="Search conversations..."
+            placeholder="Search Chats..."
             className="pl-9"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -89,7 +89,7 @@ export function ChatSidebar({
       {/* Conversations list */}
       <ScrollArea className="flex-1">
         <div className="space-y-1 px-2">
-          {otherChats.map((chat) => (
+          {visibleChats.map((chat) => (
             <button
               key={chat.id}
               onClick={() => setSelectedChat(chat)}
