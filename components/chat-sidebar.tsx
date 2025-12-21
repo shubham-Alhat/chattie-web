@@ -115,7 +115,8 @@ export function ChatSidebar({ onClose }: ChatSidebarProps) {
                     {chat.username}
                   </h3>
                   <span className="text-xs text-muted-foreground whitespace-nowrap">
-                    00.00
+                    {/* 00.00 */}
+                    offline
                   </span>
                 </div>
                 {/* <p className="text-sm text-muted-foreground truncate">

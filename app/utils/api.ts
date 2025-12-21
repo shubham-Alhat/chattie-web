@@ -1,11 +1,10 @@
 import axios from "axios";
-import { toast } from "sonner";
 
 // Create axios instance with default config
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   withCredentials: true,
-  timeout: 10000, // 10 seconds
+  timeout: 20000, // 20 seconds
   headers: {
     "Content-Type": "application/json",
   },

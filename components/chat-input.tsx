@@ -10,12 +10,16 @@ import useChatStore from "@/store/chatStore";
 import axios from "axios";
 import { toast } from "sonner";
 import api from "@/app/utils/api";
+import useMessageStore from "@/store/messageStore";
 
 export function ChatInput() {
   const [inputMessage, setInputMessage] = useState("");
 
   // useChatStore
   const selectedChat = useChatStore((state) => state.selectedChat);
+
+  // useMessageStore
+  const addMessage = useMessageStore((state) => state.addMessage);
 
   const handleSend = async () => {
     try {
@@ -32,7 +36,7 @@ export function ChatInput() {
         receiverId: selectedChat?.id,
       });
 
-      console.log(res);
+      addMessage(res.data.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log(error);

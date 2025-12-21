@@ -12,8 +12,6 @@ import api from "@/app/utils/api";
 import { MessageSkeleton } from "./message-skeleton";
 
 export function ChatMessages() {
-  const scrollRef = useRef<HTMLDivElement>(null);
-
   const [loading, setLoading] = useState(true);
 
   // useChatStore
@@ -27,10 +25,16 @@ export function ChatMessages() {
   const messages = useMessageStore((state) => state.messages);
   const setMessages = useMessageStore((state) => state.setMessages);
 
+  // scroll to last message
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  // auto scroll when messages changes
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
+    scrollToBottom();
   }, [messages]);
 
   useEffect(() => {
@@ -64,7 +68,7 @@ export function ChatMessages() {
 
   return (
     <ScrollArea className="h-full">
-      <div ref={scrollRef} className="flex flex-col gap-4 px-4 py-6 lg:px-6">
+      <div className="flex flex-col gap-4 px-4 py-6 lg:px-6">
         {loading ? (
           <MessageSkeleton />
         ) : (
@@ -120,6 +124,7 @@ export function ChatMessages() {
             </div>
           ))
         )}
+        <div ref={messagesEndRef} />
       </div>
     </ScrollArea>
   );

@@ -2,11 +2,8 @@ import { NextResponse, NextRequest } from "next/server";
 import api from "./app/utils/api";
 import axios from "axios";
 
-// This function can be marked `async` if using `await` inside
 export async function proxy(request: NextRequest) {
   const token = request.cookies.get("accessToken")?.value;
-
-  return;
 
   if (!token) {
     return NextResponse.redirect(new URL("/login", request.url));
@@ -18,16 +15,18 @@ export async function proxy(request: NextRequest) {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(res.data.data);
+
     return NextResponse.next();
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.log(error.response?.data);
-      if (error.response?.data.redirect) {
+      if (error.response && error.response.data.redirect) {
         return NextResponse.redirect(
           new URL(error.response.data.redirect, request.url)
         );
       }
+
+      return NextResponse.redirect(new URL("/login", request.url));
     } else {
       const err = error as Error;
       console.log(err);
