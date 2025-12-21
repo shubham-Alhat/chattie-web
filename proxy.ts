@@ -10,7 +10,7 @@ export async function proxy(request: NextRequest) {
   }
 
   try {
-    const res = await api.get("/checkme", {
+    await api.get("/checkme", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -33,8 +33,6 @@ export async function proxy(request: NextRequest) {
       return NextResponse.redirect(new URL("/login", request.url));
     }
   }
-
-  return;
 }
 
 export const config = {
