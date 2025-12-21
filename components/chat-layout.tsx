@@ -14,112 +14,8 @@ import useChatStore from "@/store/chatStore";
 import DefaultChatBox from "./DefaultChatBox";
 import useMessageStore from "@/store/messageStore";
 
-interface Message {
-  id: string;
-  text: string;
-  sender: "user" | "other";
-  timestamp: string;
-}
-
-interface Conversation {
-  id: string;
-  name: string;
-  avatar: string;
-  lastMessage: string;
-  timestamp: string;
-  unread?: number;
-}
-
-const mockConversations: Conversation[] = [
-  {
-    id: "1",
-    name: "Design Team",
-    avatar: "DT",
-    lastMessage: "The new mockups are ready",
-    timestamp: "2m ago",
-    unread: 3,
-  },
-  {
-    id: "2",
-    name: "Sarah Johnson",
-    avatar: "SJ",
-    lastMessage: "Thanks for the update!",
-    timestamp: "15m ago",
-  },
-  {
-    id: "3",
-    name: "Marketing Group",
-    avatar: "MG",
-    lastMessage: "Let's schedule the campaign",
-    timestamp: "1h ago",
-    unread: 1,
-  },
-  {
-    id: "4",
-    name: "Alex Chen",
-    avatar: "AC",
-    lastMessage: "See you at the meeting",
-    timestamp: "3h ago",
-  },
-  {
-    id: "5",
-    name: "Product Updates",
-    avatar: "PU",
-    lastMessage: "Version 2.0 is live!",
-    timestamp: "Yesterday",
-  },
-];
-
-const mockMessages: Message[] = [
-  {
-    id: "1",
-    text: "Hey! How are you doing?",
-    sender: "other",
-    timestamp: "10:30 AM",
-  },
-  {
-    id: "2",
-    text: "I'm doing great, thanks! Just finished the new designs.",
-    sender: "user",
-    timestamp: "10:32 AM",
-  },
-  {
-    id: "3",
-    text: "That's awesome! Can't wait to see them.",
-    sender: "other",
-    timestamp: "10:33 AM",
-  },
-  {
-    id: "4",
-    text: "I'll send them over in a few minutes. I think you'll really like the direction we went with the color palette.",
-    sender: "user",
-    timestamp: "10:35 AM",
-  },
-  {
-    id: "5",
-    text: "Perfect! I'm looking forward to it.",
-    sender: "other",
-    timestamp: "10:36 AM",
-  },
-  {
-    id: "6",
-    text: "This is my first custome added message.",
-    sender: "user",
-    timestamp: "12:00 AM",
-  },
-  {
-    id: "7",
-    text: "well , second one",
-    sender: "other",
-    timestamp: "12:45 PM",
-  },
-];
-
 export function ChatLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [selectedConversation, setSelectedConversation] =
-    useState<Conversation>(mockConversations[0]);
-  // const [messages, setMessages] = useState<Message[]>(mockMessages);
 
   // useAuthStore
   const authUser = useAuthStore((state) => state.authUser);
@@ -134,11 +30,6 @@ export function ChatLayout() {
   // useMessageStore
 
   const setMessages = useMessageStore((state) => state.setMessages);
-
-  const handleSelectConversation = (conversation: Conversation) => {
-    setSelectedConversation(conversation);
-    setIsSidebarOpen(false);
-  };
 
   useEffect(() => {
     // reset states
