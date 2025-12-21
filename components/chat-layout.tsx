@@ -135,19 +135,6 @@ export function ChatLayout() {
 
   const setMessages = useMessageStore((state) => state.setMessages);
 
-  const handleSendMessage = (text: string) => {
-    const newMessage: Message = {
-      id: Date.now().toString(),
-      text,
-      sender: "user",
-      timestamp: new Date().toLocaleTimeString("en-US", {
-        hour: "numeric",
-        minute: "2-digit",
-      }),
-    };
-    setMessages([...messages, newMessage]);
-  };
-
   const handleSelectConversation = (conversation: Conversation) => {
     setSelectedConversation(conversation);
     setIsSidebarOpen(false);
@@ -191,10 +178,6 @@ export function ChatLayout() {
     getAuthUser();
   }, []);
 
-  // useEffect(() => {
-  //   console.log("from useEffect - ", otherChats);
-  // }, [otherChats]);
-
   return (
     <div className="flex h-screen overflow-hidden bg-background">
       {/* Mobile overlay */}
@@ -211,12 +194,7 @@ export function ChatLayout() {
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <ChatSidebar
-          conversations={mockConversations}
-          selectedConversation={selectedConversation}
-          onSelectConversation={handleSelectConversation}
-          onClose={() => setIsSidebarOpen(false)}
-        />
+        <ChatSidebar onClose={() => setIsSidebarOpen(false)} />
       </aside>
 
       {/* Main chat area */}
@@ -258,7 +236,7 @@ export function ChatLayout() {
           {/* Input */}
 
           <div className="border-t border-border bg-card p-4">
-            <ChatInput onSendMessage={handleSendMessage} />
+            <ChatInput />
           </div>
         </main>
       )}

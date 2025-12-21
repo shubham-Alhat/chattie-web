@@ -11,11 +11,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import api from "@/app/utils/api";
 
-interface ChatInputProps {
-  onSendMessage: (text: string) => void;
-}
-
-export function ChatInput({ onSendMessage }: ChatInputProps) {
+export function ChatInput() {
   const [inputMessage, setInputMessage] = useState("");
 
   // useChatStore

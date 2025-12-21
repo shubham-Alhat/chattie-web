@@ -66,9 +66,15 @@ function Signup() {
         router.push(response.data.redirect); // go to login
       }
     } catch (error) {
+      // when axios detects error (4xx,5xx) in response, axios throws error response --> we get `error.response.data.message`
+
+      // when server down OR No Internet Connection, axios throws req error. ie. response object is not in axios error ---> so we error.message
       if (axios.isAxiosError(error)) {
-        console.log(error.response?.data.message);
-        toast.error(error.response?.data.message);
+        if (error.response && error.response.data.message) {
+          toast.error(error.response?.data.message);
+        } else {
+          toast.error(error.message);
+        }
       } else {
         const err = error as Error;
         console.log(err);

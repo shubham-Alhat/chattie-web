@@ -24,7 +24,11 @@ export function DropdownMenuDemo() {
     } catch (error) {
       console.log(error);
       if (axios.isAxiosError(error)) {
-        toast.error(error.response?.data.message);
+        if (error.response && error.response.data.message) {
+          toast.error(error.response?.data.message);
+        } else {
+          toast.error(error.message);
+        }
       } else {
         console.log(error);
       }

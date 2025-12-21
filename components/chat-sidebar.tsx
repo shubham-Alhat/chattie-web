@@ -1,39 +1,32 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Search, X, MoreVertical, Edit } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { DropdownMenuDemo } from "./Dropdown";
-import axios from "axios";
-import { toast } from "sonner";
-import api from "@/app/utils/api";
+
 import useChatStore from "@/store/chatStore";
 
-interface Conversation {
+type Chat = {
   id: string;
-  name: string;
-  avatar: string;
-  lastMessage: string;
-  timestamp: string;
-  unread?: number;
-}
+  username: string;
+  email: string;
+  password?: string;
+  avatar: string | null;
+  sentMessages?: [];
+  receivedMessages?: [];
+  updatedAt?: string;
+  createdAt?: string;
+};
 
 interface ChatSidebarProps {
-  conversations: Conversation[];
-  selectedConversation: Conversation;
-  onSelectConversation: (conversation: Conversation) => void;
   onClose: () => void;
 }
 
-export function ChatSidebar({
-  conversations,
-  selectedConversation,
-  onSelectConversation,
-  onClose,
-}: ChatSidebarProps) {
+export function ChatSidebar({ onClose }: ChatSidebarProps) {
   const [searchQuery, setSearchQuery] = useState("");
 
   // useChatStore
@@ -44,6 +37,11 @@ export function ChatSidebar({
   const visibleChats = otherChats.filter((conv) =>
     conv.username.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const handleSelectChat = (chat: Chat) => {
+    setSelectedChat(chat);
+    onClose();
+  };
 
   return (
     <div className="flex h-full flex-col">
@@ -92,7 +90,7 @@ export function ChatSidebar({
           {visibleChats.map((chat) => (
             <button
               key={chat.id}
-              onClick={() => setSelectedChat(chat)}
+              onClick={() => handleSelectChat(chat)}
               className={cn(
                 "flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left transition-colors hover:bg-background cursor-pointer",
                 selectedChat !== null && selectedChat.id === chat.id
