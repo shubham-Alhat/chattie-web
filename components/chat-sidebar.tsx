@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -31,6 +31,7 @@ export function ChatSidebar({ onClose }: ChatSidebarProps) {
   const [searchQuery, setSearchQuery] = useState("");
 
   const isConnected = useWebsocketStore((state) => state.isConnected);
+  const onlineUsers = useWebsocketStore((state) => state.onlineUsers);
 
   // useChatStore
   const otherChats = useChatStore((state) => state.otherChats);
@@ -46,20 +47,17 @@ export function ChatSidebar({ onClose }: ChatSidebarProps) {
     onClose();
   };
 
+  // Optimized online check with useMemo
+  const onlineUsersSet = useMemo(() => {
+    return new Set(onlineUsers);
+  }, [onlineUsers]);
+
   return (
     <div className="flex h-full flex-col">
       {/* Sidebar header */}
       <div className="flex items-center justify-between border-b border-border px-4 py-4">
         <h1 className="text-xl font-bold text-card-foreground">Chats</h1>
         <div className="flex items-center gap-1">
-          {/* <Button variant="ghost" size="icon" className="h-9 w-9">
-            <Edit className="h-4 w-4" />
-            <span className="sr-only">New message</span>
-          </Button> */}
-          {/* <Button variant="ghost" size="icon" className="h-9 w-9">
-            <MoreVertical className="h-4 w-4" />
-            <span className="sr-only">More options</span>
-          </Button> */}
           <DropdownMenuDemo />
           <Button
             variant="ghost"
@@ -90,48 +88,49 @@ export function ChatSidebar({ onClose }: ChatSidebarProps) {
       {/* Conversations list */}
       <ScrollArea className="flex-1">
         <div className="space-y-1 px-2">
-          {visibleChats.map((chat) => (
-            <button
-              key={chat.id}
-              onClick={() => handleSelectChat(chat)}
-              className={cn(
-                "flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left transition-colors hover:bg-background cursor-pointer",
-                selectedChat !== null && selectedChat.id === chat.id
-                  ? "bg-background"
-                  : ""
-              )}
-            >
-              <div className="relative flex-shrink-0">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground font-semibold">
-                  {chat.avatar}
-                </div>
-                {/* {conversation.unread && (
-                  <div className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-xs font-bold text-accent-foreground">
-                    {conversation.unread}
-                  </div>
-                )} */}
-              </div>
+          {visibleChats.map((chat) => {
+            const isOnline = onlineUsersSet.has(chat.id);
 
-              <div className="flex-1 overflow-hidden">
-                <div className="flex items-center justify-between gap-2">
-                  <h3 className="font-semibold text-card-foreground truncate">
-                    {chat.username}
-                  </h3>
-                  <span className="text-xs text-muted-foreground whitespace-nowrap">
-                    {/* 00.00 */}
-                    {/* {isConnected ? (
-                      <span className="text-green-400">Online</span>
-                    ) : (
-                      "Offline"
-                    )} */}
-                  </span>
+            return (
+              <button
+                key={chat.id}
+                onClick={() => handleSelectChat(chat)}
+                className={cn(
+                  "flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left transition-colors hover:bg-background cursor-pointer",
+                  selectedChat !== null && selectedChat.id === chat.id
+                    ? "bg-background"
+                    : ""
+                )}
+              >
+                <div className="relative flex-shrink-0">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground font-semibold">
+                    {chat.avatar}
+                  </div>
+
+                  {/* Online indicator - green dot */}
+                  {isOnline && (
+                    <div className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full bg-green-500 border-2 border-background" />
+                  )}
                 </div>
-                {/* <p className="text-sm text-muted-foreground truncate">
-                  last message
-                </p> */}
-              </div>
-            </button>
-          ))}
+
+                <div className="flex-1 overflow-hidden">
+                  <div className="flex items-center justify-between gap-2">
+                    <h3 className="font-semibold text-card-foreground truncate">
+                      {chat.username}
+                    </h3>
+                    <span className="text-xs text-muted-foreground whitespace-nowrap">
+                      {/*  Show "Online" text */}
+                      {isOnline && (
+                        <span className="text-green-500 font-medium">
+                          Online
+                        </span>
+                      )}
+                    </span>
+                  </div>
+                </div>
+              </button>
+            );
+          })}
         </div>
       </ScrollArea>
     </div>

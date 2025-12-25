@@ -3,6 +3,7 @@ import { create } from "zustand";
 interface WebsocketStore {
   ws: null | WebSocket;
   isConnected: boolean;
+  onlineUsers: string[] | [];
   connectToWebsocketServer: (userId: string) => void;
   disconnectWebsocketServer: (userId: string) => void;
 }
@@ -11,6 +12,7 @@ const useWebsocketStore = create<WebsocketStore>((set, get) => ({
   // states
   ws: null,
   isConnected: false,
+  onlineUsers: [],
 
   // actions
   connectToWebsocketServer: (userId) => {
@@ -44,10 +46,26 @@ const useWebsocketStore = create<WebsocketStore>((set, get) => ({
       // check messages events
       if (data.type === "user_online") {
         // set online users
-        console.log(`${data.userId} is online`);
+        const userId = data.userId;
+        const { onlineUsers } = get();
+
+        // remove duplicate id if there
+        const filterUsers = onlineUsers.filter((id) => id !== userId);
+
+        set({ onlineUsers: [...filterUsers, userId] });
+
+        console.log(`${data.userId} is Online`);
       } else if (data.type === "user_offline") {
         //   set online users
-        console.log(`${data.userId} is offline`);
+        console.log(`${data.userId} is Offline`);
+
+        const { onlineUsers } = get();
+        const updatedOnlineUsers = onlineUsers.filter(
+          (id) => id !== data.userId
+        );
+        set({ onlineUsers: updatedOnlineUsers });
+      } else if (data.type === "online_users_list") {
+        set({ onlineUsers: data.onlineUserIds });
       }
     };
 
