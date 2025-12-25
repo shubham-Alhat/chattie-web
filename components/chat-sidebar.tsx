@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { DropdownMenuDemo } from "./Dropdown";
 
 import useChatStore from "@/store/chatStore";
+import useWebsocketStore from "@/store/websocketStore";
 
 type Chat = {
   id: string;
@@ -28,6 +29,8 @@ interface ChatSidebarProps {
 
 export function ChatSidebar({ onClose }: ChatSidebarProps) {
   const [searchQuery, setSearchQuery] = useState("");
+
+  const isConnected = useWebsocketStore((state) => state.isConnected);
 
   // useChatStore
   const otherChats = useChatStore((state) => state.otherChats);
@@ -116,7 +119,11 @@ export function ChatSidebar({ onClose }: ChatSidebarProps) {
                   </h3>
                   <span className="text-xs text-muted-foreground whitespace-nowrap">
                     {/* 00.00 */}
-                    offline
+                    {/* {isConnected ? (
+                      <span className="text-green-400">Online</span>
+                    ) : (
+                      "Offline"
+                    )} */}
                   </span>
                 </div>
                 {/* <p className="text-sm text-muted-foreground truncate">
