@@ -71,6 +71,7 @@ const useWebsocketStore = create<WebsocketStore>((set, get) => ({
 
     websocket.onclose = () => {
       set({ ws: null, isConnected: false });
+      set({ onlineUsers: [] });
     };
 
     websocket.onerror = () => {
