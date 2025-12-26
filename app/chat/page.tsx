@@ -18,6 +18,7 @@ function Chat() {
   useEffect(() => {
     if (authUser && authUser.id) {
       connectToWebsocketServer(authUser.id);
+      console.log("called this function");
     }
   }, [authUser]);
 
