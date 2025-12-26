@@ -16,10 +16,16 @@ function Chat() {
   } = useWebsocketStore();
 
   useEffect(() => {
+    if (!authUser) return;
+
     if (authUser && authUser.id) {
       connectToWebsocketServer(authUser.id);
       console.log("called this function");
     }
+
+    return () => {
+      disconnectWebsocketServer(authUser.id);
+    };
   }, [authUser]);
 
   const handleClick = () => {

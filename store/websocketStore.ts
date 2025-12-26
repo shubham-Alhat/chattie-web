@@ -1,4 +1,7 @@
 import { create } from "zustand";
+import useMessageStore from "./messageStore";
+import useChatStore from "./chatStore";
+import { toast } from "sonner";
 
 interface WebsocketStore {
   ws: null | WebSocket;
@@ -66,6 +69,18 @@ const useWebsocketStore = create<WebsocketStore>((set, get) => ({
         set({ onlineUsers: updatedOnlineUsers });
       } else if (data.type === "online_users_list") {
         set({ onlineUsers: data.onlineUserIds });
+      } else if (data.type === "new_message") {
+        const newMessage = data.newMessage;
+
+        const selectedChat = useChatStore.getState().selectedChat;
+
+        if (!selectedChat) return;
+
+        if (selectedChat.id === newMessage.senderId) {
+          useMessageStore.getState().addMessage(newMessage);
+        } else {
+          toast.message(`New message from ${newMessage.sender.username}`);
+        }
       }
     };
 
@@ -76,6 +91,7 @@ const useWebsocketStore = create<WebsocketStore>((set, get) => ({
 
     websocket.onerror = () => {
       set({ ws: null, isConnected: false });
+      set({ onlineUsers: [] });
     };
   },
   disconnectWebsocketServer: (userId) => {

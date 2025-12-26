@@ -11,6 +11,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import api from "@/app/utils/api";
 import useMessageStore from "@/store/messageStore";
+import useWebsocketStore from "@/store/websocketStore";
 
 export function ChatInput() {
   const [inputMessage, setInputMessage] = useState("");
@@ -20,6 +21,10 @@ export function ChatInput() {
 
   // useMessageStore
   const addMessage = useMessageStore((state) => state.addMessage);
+
+  // useWebsocketStore
+  const ws = useWebsocketStore((state) => state.ws);
+  const isConnected = useWebsocketStore((state) => state.isConnected);
 
   const handleSend = async () => {
     try {
@@ -37,6 +42,13 @@ export function ChatInput() {
       });
 
       addMessage(res.data.data);
+
+      // send send_message event
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(
+          JSON.stringify({ type: "send_message", newMessage: res.data.data })
+        );
+      }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log(error);
