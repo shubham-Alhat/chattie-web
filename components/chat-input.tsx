@@ -41,7 +41,9 @@ export function ChatInput() {
         receiverId: selectedChat?.id,
       });
 
-      addMessage(res.data.data);
+      if (selectedChat?.id === res.data.data.receiverId) {
+        addMessage(res.data.data);
+      }
 
       // send send_message event
       if (ws && ws.readyState === WebSocket.OPEN) {
