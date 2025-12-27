@@ -15,18 +15,18 @@ function Chat() {
     isConnected,
   } = useWebsocketStore();
 
-  useEffect(() => {
-    if (!authUser) return;
+  // useEffect(() => {
+  //   if (!authUser) return;
 
-    if (authUser && authUser.id) {
-      connectToWebsocketServer(authUser.id);
-      console.log("called this function");
-    }
+  //   if (authUser && authUser.id) {
+  //     connectToWebsocketServer(authUser.id);
+  //     console.log("called this function");
+  //   }
 
-    return () => {
-      disconnectWebsocketServer(authUser.id);
-    };
-  }, [authUser]);
+  //   return () => {
+  //     disconnectWebsocketServer(authUser.id);
+  //   };
+  // }, [authUser]);
 
   const handleClick = () => {
     if (authUser && authUser.id) {
