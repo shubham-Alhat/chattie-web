@@ -71,19 +71,6 @@ export function ChatSidebar({ onClose }: ChatSidebarProps) {
         </div>
       </div>
 
-      {/* warning message */}
-      {isConnected ? (
-        <div></div>
-      ) : (
-        <div className="flex items-center justify-center gap-2 pt-1 text-sm text-red-400">
-          <span className="relative flex h-3 w-3">
-            <span className="absolute h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
-            <span className="relative h-3 w-3 rounded-full bg-red-500"></span>
-          </span>
-          <span>Not Connected...</span>
-        </div>
-      )}
-
       {/* Search */}
       <div className="px-4 py-3">
         <div className="relative">

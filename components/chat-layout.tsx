@@ -13,11 +13,9 @@ import api from "@/app/utils/api";
 import useChatStore from "@/store/chatStore";
 import DefaultChatBox from "./DefaultChatBox";
 import useMessageStore from "@/store/messageStore";
-import useWebsocketStore from "@/store/websocketStore";
 
 export function ChatLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const isConnectedRef = useRef(false);
 
   // useAuthStore
   const authUser = useAuthStore((state) => state.authUser);
@@ -33,13 +31,6 @@ export function ChatLayout() {
 
   const setMessages = useMessageStore((state) => state.setMessages);
 
-  const {
-    connectToWebsocketServer,
-    disconnectWebsocketServer,
-    ws,
-    isConnected,
-  } = useWebsocketStore();
-
   useEffect(() => {
     // reset states
     setAuthUser(null);
@@ -53,12 +44,6 @@ export function ChatLayout() {
         const res = await api.get("/checkme");
         if (res.data.data) {
           setAuthUser(res.data.data);
-          // call connection ws
-          if (!isConnectedRef.current) {
-            connectToWebsocketServer(res.data.data.id);
-            console.log("call connect function");
-            isConnectedRef.current = true;
-          }
         }
 
         const otherUsers = await api.get("/chats/get-all-chats");
@@ -82,12 +67,6 @@ export function ChatLayout() {
     };
 
     getAuthUser();
-    return () => {
-      if (authUser && authUser.id) {
-        disconnectWebsocketServer(authUser.id);
-        console.log("call disconnect function");
-      }
-    };
   }, []);
 
   return (
