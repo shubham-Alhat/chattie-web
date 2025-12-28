@@ -56,11 +56,8 @@ const useWebsocketStore = create<WebsocketStore>((set, get) => ({
         const filterUsers = onlineUsers.filter((id) => id !== userId);
 
         set({ onlineUsers: [...filterUsers, userId] });
-
-        console.log(`${data.userId} is Online`);
       } else if (data.type === "user_offline") {
         //   set online users
-        console.log(`${data.userId} is Offline`);
 
         const { onlineUsers } = get();
         const updatedOnlineUsers = onlineUsers.filter(
