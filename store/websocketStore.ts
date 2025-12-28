@@ -72,14 +72,18 @@ const useWebsocketStore = create<WebsocketStore>((set, get) => ({
         const selectedChat = useChatStore.getState().selectedChat;
 
         if (!selectedChat) {
-          toast.info(`New message from ${newMessage.sender.username}`);
+          toast.info(`New message from ${newMessage.sender.username}`, {
+            icon: "🗯️",
+          });
           return;
         }
 
         if (selectedChat.id === newMessage.senderId) {
           useMessageStore.getState().addMessage(newMessage);
         } else {
-          toast.message(`New message from ${newMessage.sender.username}`);
+          toast.info(`New message from ${newMessage.sender.username}`, {
+            icon: "🗯️",
+          });
         }
       }
     };
