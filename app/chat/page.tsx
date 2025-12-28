@@ -16,28 +16,28 @@ function Chat() {
     isConnected,
   } = useWebsocketStore();
 
-  const isConnectedRef = useRef(false);
+  // const isConnectedRef = useRef(false);
 
-  useEffect(() => {
-    if (!authUser) return;
+  // useEffect(() => {
+  //   if (!authUser) return;
 
-    if (authUser && authUser.id) {
-      if (!isConnectedRef.current) {
-        connectToWebsocketServer(authUser.id);
-        console.log("called this function");
-        isConnectedRef.current = true;
-      }
-    }
+  //   if (authUser && authUser.id) {
+  //     if (!isConnectedRef.current) {
+  //       connectToWebsocketServer(authUser.id);
+  //       console.log("called this function");
+  //       isConnectedRef.current = true;
+  //     }
+  //   }
 
-    return () => {
-      if (authUser && authUser.id) {
-        if (!isConnectedRef.current) {
-          disconnectWebsocketServer(authUser.id);
-          console.log("diconnect");
-        }
-      }
-    };
-  }, [authUser]);
+  //   return () => {
+  //     if (authUser && authUser.id) {
+  //       if (!isConnectedRef.current) {
+  //         disconnectWebsocketServer(authUser.id);
+  //         console.log("diconnect");
+  //       }
+  //     }
+  //   };
+  // }, [authUser]);
 
   const handleClick = () => {
     if (authUser && authUser.id) {

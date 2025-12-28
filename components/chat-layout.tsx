@@ -13,6 +13,7 @@ import api from "@/app/utils/api";
 import useChatStore from "@/store/chatStore";
 import DefaultChatBox from "./DefaultChatBox";
 import useMessageStore from "@/store/messageStore";
+import useWebsocketStore from "@/store/websocketStore";
 
 export function ChatLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -28,8 +29,18 @@ export function ChatLayout() {
   const setSelectedChat = useChatStore((state) => state.setSelectedChat);
 
   // useMessageStore
-
   const setMessages = useMessageStore((state) => state.setMessages);
+
+  // useWebsocket store
+  const {
+    connectToWebsocketServer,
+    disconnectWebsocketServer,
+    ws,
+    isConnected,
+  } = useWebsocketStore();
+
+  // useRef for userId
+  const userIdRef = useRef<null | string>(null);
 
   useEffect(() => {
     // reset states
@@ -38,12 +49,20 @@ export function ChatLayout() {
     setSelectedChat(null);
     setMessages([]);
 
+    console.log("layout effect");
+
     // call fresh api
     const getAuthUser = async () => {
       try {
         const res = await api.get("/checkme");
         if (res.data.data) {
           setAuthUser(res.data.data);
+          // set ws connection
+          if (!ws || !isConnected) {
+            connectToWebsocketServer(res.data.data.id);
+            console.log("call connected...");
+            userIdRef.current = res.data.data.id;
+          }
         }
 
         const otherUsers = await api.get("/chats/get-all-chats");
@@ -67,6 +86,13 @@ export function ChatLayout() {
     };
 
     getAuthUser();
+
+    return () => {
+      if (userIdRef.current) {
+        disconnectWebsocketServer(userIdRef.current);
+        console.log("call disconnect");
+      }
+    };
   }, []);
 
   return (
