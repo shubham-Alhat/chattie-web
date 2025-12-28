@@ -8,11 +8,10 @@ export default function Home() {
 
   return (
     <div className="w-full h-screen flex flex-col items-center justify-center">
-      <span className="text-4xl">Welcome to Chattie</span>
+      <span className="text-2xl md:text-4xl">Welcome to Chattie</span>
       <Button
         onClick={() => router.push("/chat")}
-        variant={"secondary"}
-        className="mt-3.5 text-xl cursor-pointer"
+        className="mt-3.5 text-xl cursor-pointer bg-primary"
       >
         Lets Chat
       </Button>

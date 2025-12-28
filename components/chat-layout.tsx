@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ChatSidebar } from "@/components/chat-sidebar";
 import { ChatMessages } from "@/components/chat-messages";
 import { ChatInput } from "@/components/chat-input";
@@ -37,6 +37,7 @@ export function ChatLayout() {
     disconnectWebsocketServer,
     ws,
     isConnected,
+    onlineUsers,
   } = useWebsocketStore();
 
   // useRef for userId
@@ -95,6 +96,10 @@ export function ChatLayout() {
     };
   }, []);
 
+  const onlineUsersSet = useMemo(() => {
+    return new Set(onlineUsers);
+  }, [onlineUsers]);
+
   return (
     <div className="flex h-screen overflow-hidden bg-background">
       {/* Mobile overlay */}
@@ -140,7 +145,15 @@ export function ChatLayout() {
                 <h2 className="font-semibold text-card-foreground truncate">
                   {selectedChat?.username}
                 </h2>
-                <p className="text-sm text-muted-foreground">Active now</p>
+                <p className="text-sm text-muted-foreground">
+                  {onlineUsersSet.has(selectedChat.id) ? (
+                    <span className="text-sm text-green-400">online</span>
+                  ) : (
+                    <span className="text-sm text-muted-foreground">
+                      offline
+                    </span>
+                  )}
+                </p>
               </div>
             </div>
           </header>
