@@ -24,10 +24,6 @@ function Signup() {
   const [avatar, setAvatar] = useState("");
   const router = useRouter();
 
-  // useEffect(() => {
-  //   console.log(avatar, avatar.length);
-  // }, [avatar]);
-
   const handleCreateAccount = async () => {
     try {
       if (username == "" || !username) {

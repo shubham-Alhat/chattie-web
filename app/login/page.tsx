@@ -22,7 +22,7 @@ function Login() {
   const [email, setEmail] = useState("");
   const router = useRouter();
 
-  const { authUser, setAuthUser } = useAuthStore();
+  const { setAuthUser } = useAuthStore();
 
   const handleLoginButton = async () => {
     try {

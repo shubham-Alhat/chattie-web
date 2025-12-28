@@ -19,11 +19,10 @@ export function ChatLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // useAuthStore
-  const authUser = useAuthStore((state) => state.authUser);
   const setAuthUser = useAuthStore((state) => state.setAuthUser);
 
   // useChatStore
-  const otherChats = useChatStore((state) => state.otherChats);
+
   const setOtherChats = useChatStore((state) => state.setOtherChats);
   const selectedChat = useChatStore((state) => state.selectedChat);
   const setSelectedChat = useChatStore((state) => state.setSelectedChat);

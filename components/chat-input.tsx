@@ -24,7 +24,6 @@ export function ChatInput() {
 
   // useWebsocketStore
   const ws = useWebsocketStore((state) => state.ws);
-  const isConnected = useWebsocketStore((state) => state.isConnected);
 
   const handleSend = async () => {
     try {
