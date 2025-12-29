@@ -36,6 +36,8 @@ function Login() {
         return;
       }
 
+      console.log("button click");
+
       const response = await api.post("/auth/login", {
         password,
         email,
@@ -43,6 +45,8 @@ function Login() {
 
       // set authUser state
       setAuthUser(response.data.data);
+
+      console.log("res comes here");
 
       router.push("/chat");
     } catch (error) {
