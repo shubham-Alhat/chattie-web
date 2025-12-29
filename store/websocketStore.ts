@@ -29,7 +29,7 @@ const useWebsocketStore = create<WebsocketStore>((set, get) => ({
     }
 
     // create new connection
-    const websocket = new WebSocket("ws://localhost:8000/ws");
+    const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
 
     websocket.onopen = () => {
       set({ ws: websocket, isConnected: true });
