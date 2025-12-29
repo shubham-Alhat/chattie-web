@@ -14,9 +14,11 @@ import useChatStore from "@/store/chatStore";
 import DefaultChatBox from "./DefaultChatBox";
 import useMessageStore from "@/store/messageStore";
 import useWebsocketStore from "@/store/websocketStore";
+import { useRouter } from "next/navigation";
 
 export function ChatLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const router = useRouter();
 
   // useAuthStore
   const setAuthUser = useAuthStore((state) => state.setAuthUser);
@@ -73,14 +75,13 @@ export function ChatLayout() {
       } catch (error) {
         console.log("error", error);
         if (axios.isAxiosError(error)) {
-          console.log("axios error - ", error);
-          if (error.response && error.response.data.message) {
-            toast.error(error.response?.data.message);
-          } else {
-            toast.error(error.message);
+          console.log(error.response?.data);
+          if (error.response && error.response.data.redirect) {
+            router.push("/login");
           }
         } else {
           console.log(error);
+          router.push("/login");
         }
       }
     };
