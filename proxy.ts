@@ -5,46 +5,19 @@ import axios from "axios";
 // https://share.google/aimode/GiF3GdsLVfDnN05bC
 
 export async function proxy(request: NextRequest) {
-  // const token = request.cookies.get("accessToken")?.value;
-
-  // if (!token) {
-  //   return NextResponse.redirect(new URL("/login", request.url));
-  // }
-
-  console.log("=== MIDDLEWARE RUNNING ===");
-  console.log("Path:", request.nextUrl.pathname);
-
   const token = request.cookies.get("accessToken")?.value;
-  console.log("Token found:", !!token);
-  console.log("Token value:", token?.substring(0, 20) + "..."); // First 20 chars
 
   if (!token) {
-    console.log("❌ No token - redirecting to login");
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
   try {
-    // await api.get("/checkme", {
-    //   headers: {
-    //     Authorization: `Bearer ${token}`,
-    //   },
-    // });
+    await api.get("/checkme", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-    // return NextResponse.next();
-
-    console.log("🔄 Making auth check request...");
-
-    const response = await axios.get(
-      "https://chattie-server.onrender.com/api/v1/checkme",
-      {
-        headers: {
-          Cookie: `accessToken=${token}`,
-        },
-        timeout: 5000,
-      }
-    );
-
-    console.log("✅ Auth check passed:", response.data);
     return NextResponse.next();
   } catch (error) {
     if (axios.isAxiosError(error)) {
