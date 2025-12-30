@@ -320,3 +320,7 @@ This behavior makes your filter code **elegant and simple**:
 - ✅ No need for `if (searchQuery === "") return conversations;`
 - ✅ No need for special cases
 - ✅ One filter handles both empty and filled search states
+
+### Rewrite in nextjs
+
+[read two chats](https://claude.ai/share/04fe54ac-976e-441d-8e2e-e1efb7877cb6)
