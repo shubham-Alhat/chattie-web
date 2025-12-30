@@ -4,7 +4,8 @@ A full-stack real-time chat application built using **raw WebSockets** (no Socke
 
 ## 🎥 Demo Video
 
-https://user-images.githubusercontent.com/xxxx/demo.mp4
+[![Watch Demo](https://res.cloudinary.com/diery17cm/video/upload/so_1/IMG_0691_knrgne.jpg)](https://res.cloudinary.com/diery17cm/video/upload/v1767116107/IMG_0691_knrgne.mov)
+
 
 ## ✨ Features
 
@@ -17,7 +18,7 @@ https://user-images.githubusercontent.com/xxxx/demo.mp4
 ## 🛠 Tech Stack
 
 - **Next.js** for pure frontend.
-- Node.js
+- **Node.js** for backend
 - Express
 - WebSockets `(ws)`
 - Zustand
@@ -26,4 +27,4 @@ https://user-images.githubusercontent.com/xxxx/demo.mp4
 ## 📦 Deployment
 
 - Frontend: Vercel
-- Backend: (Render)
+- Backend: Render
