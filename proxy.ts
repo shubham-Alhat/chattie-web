@@ -5,18 +5,18 @@ import axios from "axios";
 // https://share.google/aimode/GiF3GdsLVfDnN05bC
 
 export async function proxy(request: NextRequest) {
-  // const token = request.cookies.get("accessToken")?.value;
+  const token = request.cookies.get("accessToken")?.value;
 
-  // if (!token) {
-  //   return NextResponse.redirect(new URL("/login", request.url));
-  // }
+  if (!token) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
 
   try {
-    // await api.get("/checkme", {
-    //   headers: {
-    //     Authorization: `Bearer ${token}`,
-    //   },
-    // });
+    await api.get("/checkme", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     return NextResponse.next();
   } catch (error) {
