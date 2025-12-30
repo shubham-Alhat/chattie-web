@@ -34,12 +34,15 @@ export async function proxy(request: NextRequest) {
 
     console.log("🔄 Making auth check request...");
 
-    const response = await axios.get("/checkme", {
-      headers: {
-        Cookie: `accessToken=${token}`,
-      },
-      timeout: 5000,
-    });
+    const response = await axios.get(
+      "https://chattie-server.onrender.com/api/v1/checkme",
+      {
+        headers: {
+          Cookie: `accessToken=${token}`,
+        },
+        timeout: 5000,
+      }
+    );
 
     console.log("✅ Auth check passed:", response.data);
     return NextResponse.next();
