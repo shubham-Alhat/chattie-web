@@ -324,3 +324,7 @@ This behavior makes your filter code **elegant and simple**:
 ### Rewrite in nextjs
 
 [read two chats](https://claude.ai/share/04fe54ac-976e-441d-8e2e-e1efb7877cb6)
+
+### Browser cookies setting.
+
+[google AI search](https://share.google/aimode/MtINZdRufrKY0Nf5g)
