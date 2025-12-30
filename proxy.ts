@@ -12,7 +12,7 @@ export async function proxy(request: NextRequest) {
   }
 
   try {
-    await api.get("/checkme", {
+    await api.get("https://chattie-server.onrender.com/api/v1/checkme", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
